@@ -60,6 +60,9 @@ $ sh init.sh
 * Type `www.pharmacievoisin.local` to render the frontend.
 * Type `admin.airkemist.local` to render the backend. (See below for password)
 
+Note: It could take some time before Puma starts. Meanwhile you will get a Nginx error. Refresh the page until it will be rendered. 
+To get some log about this, type `docker-compose up` instead of `docker-compose up -d`
+
 ## Workflow for a daily work.
 
 ### 1/ Get the last version of Airkemist
@@ -74,7 +77,7 @@ $ git checkout <YOUR_CURRENT_BRANCH>
 $ git merge master
 ```
 
-**NOTICE: Dont't work on the master branch. Never.**
+**IMPORTANT: Dont't work on the master branch. Never.**
 
 ### 2/ Start Airkemist containers
 
