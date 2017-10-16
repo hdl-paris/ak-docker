@@ -42,6 +42,9 @@ services:
       dockerfile: Dockerfile-templates
     volumes:
       - ./airkemist/ak_templates:/ak_templates:Z
+      - ./airkemist/ak_frontend:/ak_templates/lib/ak_frontend:Z
+      - ./ak_frontend/css:/ak_templates/lib/ak_frontend/public/css:Z
+      - ./ak_frontend/js:/ak_templates/lib/ak_frontend/public/js:Z
       - ./airkemist/ak_templates/package.json:/ak_templates/package.json:Z
       - ./airkemist/ak_templates/package.json:/ak_templates/package-lock.json:Z
       - ./node_modules/ak_templates:/ak_templates/node_modules:Z
@@ -51,6 +54,7 @@ services:
       dockerfile: Dockerfile-backend
     environment:
       - VIRTUAL_HOST=admin.airkemist.local
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     env_file:
       - rails_app_variables.env
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -73,11 +77,13 @@ services:
       - mail
       - ak_core
   ak_frontend:
+    privileged: true
     build:
       context: ./
       dockerfile: Dockerfile-frontend
     environment:
       - VIRTUAL_HOST=~^((www|preview)\.[^a][a-z0-9-]+|[^w][a-z0-9-]+\.airkemist)\.local
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     env_file:
       - rails_app_variables.env
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -86,6 +92,10 @@ services:
       - ./airkemist/ak_core:/ak_frontend/lib/ak_core:Z
       - ./airkemist/ak_templates:/ak_frontend/lib/ak_templates:Z
       - ./system:/ak_frontend/public/system:Z
+      - ./ak_frontend/templates:/ak_frontend/public/templates:Z
+      - ./ak_frontend/css:/ak_frontend/public/css:Z
+      - ./ak_frontend/js:/ak_frontend/public/js:Z
+      - ./airkemist/ak_templates/asset_management/shared:/ak_frontend/public/shared:Z
       - ./airkemist/ak_frontend/package.json:/ak_frontend/package.json:Z
       - ./airkemist/ak_backend/package.json:/ak_backend/package-lock.json:Z
       - ./node_modules/ak_frontend:/ak_frontend/node_modules:Z
@@ -105,6 +115,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile-support
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     env_file:
       - rails_app_variables.env
     volumes:

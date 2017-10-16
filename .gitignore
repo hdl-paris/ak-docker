@@ -1,4 +1,5 @@
 airkemist
+ak_frontend
 node_modules
 postgres/dumps/*
 postgres/pgdata
