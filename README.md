@@ -39,7 +39,8 @@ $ docker-compose up -d
 ### 5/ Copy your dump database
 
 ```sh
-cp airkemist.dump postgres/dumps
+$ mkdir postgres/dumps
+$ cp airkemist.dump postgres/dumps
 ```
 
 ### 6/ Initialize Airkemist application
