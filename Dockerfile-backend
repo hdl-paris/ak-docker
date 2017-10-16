@@ -1,0 +1,52 @@
+FROM ruby:2.4.2
+RUN apt-get update -qq && apt-get install -y \
+  build-essential \
+  libpq-dev \
+  curl \
+  libmagickwand-dev \
+  imagemagick \
+  locales
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+
+# Node.js
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+  && apt-get install -y nodejs
+# fix npm - not the latest version installed by apt-get
+# RUN npm install -g npm
+
+# Configure the main working directory. This is the base
+# directory used in any further RUN, COPY, and ENTRYPOINT
+# commands.
+RUN mkdir -p /ak_backend/lib
+WORKDIR /ak_backend
+
+
+ADD airkemist/ak_core ./lib/ak_core
+
+# Copy the Gemfile as well as the Gemfile.lock and install
+# the RubyGems. This is a separate step so the dependencies
+# will be cached unless changes to one of those two files
+# are made.
+ADD airkemist/ak_backend/Gemfile airkemist/ak_backend/Gemfile.lock ./
+RUN gem install bundler && bundle install --jobs 20 --retry 5
+
+# COPY airkemist/ak_backend/package.json ./
+# RUN npm install
+
+# Copy the main application.
+COPY airkemist/ak_backend ./
+
+# Expose port 3000 to the Docker host, so we can access it
+# from the outside.
+EXPOSE 3000
+
+# The main command to run when the container starts. Also
+# tell the Rails dev server to bind to all interfaces by
+# default.
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

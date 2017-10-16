@@ -1,0 +1,15 @@
+FROM debian:jessie
+
+RUN apt-get update -qq && apt-get install -y curl
+
+# Node.js
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+  && apt-get install -y nodejs
+# fix npm - not the latest version installed by apt-get
+# RUN npm install -g npm
+
+RUN mkdir -p /ak_templates
+WORKDIR /ak_templates
+
+# Copy the main application.
+COPY airkemist/ak_templates ./

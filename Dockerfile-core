@@ -1,0 +1,9 @@
+FROM debian:jessie
+
+RUN apt-get update -qq
+
+RUN mkdir -p /ak_core
+WORKDIR /ak_core
+
+# Copy the main application.
+COPY airkemist/ak_core ./

@@ -1,0 +1,5 @@
+airkemist
+node_modules
+postgres/dumps/*
+postgres/pgdata
+system

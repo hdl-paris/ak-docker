@@ -1,0 +1,32 @@
+FROM ruby:2.4.2
+RUN apt-get update -qq && apt-get install -y \
+  build-essential \
+  libpq-dev \
+  nodejs \
+  locales
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+
+# Configure the main working directory. This is the base
+# directory used in any further RUN, COPY, and ENTRYPOINT
+# commands.
+RUN mkdir -p /ak_support/lib
+WORKDIR /ak_support
+
+
+ADD airkemist/ak_core ./lib/ak_core
+
+# Copy the Gemfile as well as the Gemfile.lock and install
+# the RubyGems. This is a separate step so the dependencies
+# will be cached unless changes to one of those two files
+# are made.
+ADD airkemist/ak_support/Gemfile airkemist/ak_support/Gemfile.lock ./
+RUN gem install bundler && bundle install --jobs 20 --retry 5
+
+# Copy the main application.
+COPY airkemist/ak_support ./
