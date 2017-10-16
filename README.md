@@ -57,8 +57,8 @@ $ sh init.sh
 
 ### 8/ Open the application in your browsers
 
-Type `www.pharmacievoisin.local` to render the frontend.
-Type `admin.airkemist.local` to render the backend. (See below for password)
+* Type `www.pharmacievoisin.local` to render the frontend.
+* Type `admin.airkemist.local` to render the backend. (See below for password)
 
 ## Workflow for a daily work.
 
@@ -93,5 +93,5 @@ $ sh load.sh
 
 ### Password for backend
 
-email: `e.pharmacie.voisin@gmail.com`
-password: `D9KDYBeZue8i`
+* email: `e.pharmacie.voisin@gmail.com`
+* password: `D9KDYBeZue8i`
