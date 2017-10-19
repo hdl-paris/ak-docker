@@ -61,6 +61,7 @@ services:
     volumes:
       - ./airkemist/ak_backend:/ak_backend:Z
       - ./airkemist/ak_core:/ak_backend/lib/ak_core:Z
+      - ./airkemist/ak_templates:/ak_backend/lib/ak_templates:Z
       - ./system:/ak_backend/public/system:Z
       - ./airkemist/ak_backend/package.json:/ak_backend/package.json:Z
       - ./airkemist/ak_backend/package.json:/ak_backend/package-lock.json:Z
